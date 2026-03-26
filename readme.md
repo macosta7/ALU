@@ -1,4 +1,4 @@
-# Unidade Lógica e Aritmética (ULA) de 8 bits
+# Unidade Lógica e Aritmétrica (ULA) de 8 bits
 
 &emsp; O projeto é o desenvolvimento de uma Unidade Lógica e Aritmétrica (ULA) de 8 bits utilizando o simulador Digital. A ULA é um dos componentes mais importantes, considerado como o coração do processador, ele é responsável por realizar operações aritmétricas e lógica dentro dele.
 
@@ -47,6 +47,37 @@
 ### Multiplicação
 **Operação:** AC * N -> AC (8 LSB) e MQ (8 MSB)
 
+&emsp;A multiplicação de 8 bits é considerada a operação mais complexa da ULA, pois envolve a geração de produtos parciais e a soma sucessiva desses valores com deslocamentos, assim como uma multiplicação decimal. Para realizar multiplicação binária de 8 bits, utilizei a arquitetura de Multiplicador de Matriz, que processa a conta de maneira combinacional.
+
+- **Conceito:** Na multiplicação binária, cada bit da entrada A (8 bits) deve ser multiplicado por cada bit da entrada B (8 bits), o que gera uma matriz de 64 (8 X 8). Se fizermos a multiplicação de 1 bit por 1 bit, descobrimos que o resultado é igual a porta lógica AND, ou seja, o resultado é 1 apenas quando ambos os bits são 1, caso contrário, o resultado é 0:
+
+    1 x 1 = 1 | (A AND B) = 1;<br>
+    1 x 0 = 0 | (A AND B) = 0;<br>
+    0 x 0 = 0 | (A AND B) = 0;<br>
+
+Com isso, na construção do multiplicador de 8 bits, adicionei 64 portas AND, garantindo que todos os números sejam multiplicados por todos os números individualmente. Na imagem é possível visualizar as 64 portas AND, as duas entradas (A e B) e duas saídas divididas entre LSB (Least Significant Bits) e MSB (Most Significant Bits) para armazenar o resultado da multiplicação.
+
+<img src="assets/portas-and-multiplicacao.png" alt="Portas AND do Multiplicador" width="400">
+
+- **Soma:** Para construir a multiplicação, pensei como se fosse uma multiplicação no papel, onde após a multiplicação, é necessário somar os produtos. Então, organizei as portas lógicas AND para que elas ficassem estruturadas em linhas, em que cada linha é preciso fazer a multiplicação do resultado daquela porta lógica AND, assim resultando em 1 bit do resultado da multiplicação. 
+
+A lógica está funcionando assim:
+- A linha 1 é fácil, apenas multiplicar (com uma porta lógica AND, provamos isso com a tabela verdade) A0 com B0 e temos o bit menos significativo do resultado. 
+- Já a linha 2, precisamos multiplicar o produto de A0 e B1 com o produto de A1 e B0 (portas AND), isso gera dois produtos, então adicionei o meu somador de 1 bit para somar esses dois produtos, e o resultado é o segundo bit menos significativo do resultado. 
+- Para a linha 3, multiplico A0 e B2, A1 e B1, A2 e B0 (portas AND), isso gera três produtos, então adicionei 2 somadores de 1 bit em que, no primeiro somador, o produto de A0 e B2 são somados com o produto de A1 e B1, resultando em um valor SS2, no segundo somador, SS2 é somado com o produto de A2 e B0, resultando no terceiro bit menos significativo do resultado, um detalhe importante é que, nesse primeiro somador dessa 3° linha, adiciono o Co0 (Cout da linha anterior) como Cin desse somador, para garantir que a soma seja realizada corretamente. 
+- A lógica continua até todos os bits serem multiplicados (64 vezes, por conta das portas AND) e depois somados com os 56 somadores adicionados.
+
+<img src="assets/somadores-1-bit.png" alt="Somadores 1 bit do Multiplicador" width="400">
+
+- **Resultado:** Com todos os bits de entrada multiplicados e somados em suas respectivas posições, pulando uma casa para a esquerda assim como na multiplicação manual, temos o produto da multiplicação de 8 bits que pode gerar um número de até 16 bits, por isso dividi em duas saídas, a LSB (Least Significant Bits) utilizando S0 até S7 e a saída MSB (Most Significant Bits) utilizando o S8 até o S15.
+
+<img src="assets/saidas-multiplicador.png" alt="Saidas LSB e MSB" width="400">
+
+&emsp; O multipicador de 8 bits ficou dessa maneira:
+
+<img src="assets/multiplicador-8-bits.png" alt="Saidas LSB e MSB" width="400">
+
+
 ### Divisão
 **Operação:** AC / N -> AC (Resto) e MQ (Quociente)
 
@@ -71,7 +102,7 @@
 ### NAND
 **Operação:** AC NAND N -> AC (8 bits)
 
-&emsp; Para a implementação da operação NAND, utilizei duas entradas (A e B) então liguei essas entradas em uma porta lógica NAND e a saída da porta NAND é conectada na saída S.
+&emsp; Para a implementação da operação NAND, utilizei duas entradas (A e B), configuradas com 8 bits, e então liguei essas entradas em uma porta lógica NAND e a saída da porta NAND é conectada na saída S.
 
 <img src="assets/nand2.png" alt="NAND" width="400">
 
@@ -80,7 +111,7 @@
 ### XOR
 **Operação:** AC XOR N -> AC (8 bits)
 
-&emsp; Para a implementação da operação XOR, utilizei duas entradas (A e B) então liguei essas entradas em uma porta lógica XOR e a saída da porta XOR é conectada na saída S.
+&emsp; Para a implementação da operação XOR, utilizei duas entradas (A e B), configuradas com 8 bits, e então liguei essas entradas em uma porta lógica XOR e a saída da porta XOR é conectada na saída S.
 
 <img src="assets/xor2.png" alt="XOR" width="400">
 
