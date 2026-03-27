@@ -1,4 +1,5 @@
 # Unidade Lógica e Aritmétrica (ULA) de 8 bits
+## Marcela Costa
 
 &emsp; O projeto é o desenvolvimento de uma Unidade Lógica e Aritmétrica (ULA) de 8 bits utilizando o simulador Digital. A ULA é um dos componentes mais importantes, considerado como o coração do processador, ele é responsável por realizar operações aritmétricas e lógica dentro dele.
 
@@ -184,3 +185,5 @@ A lógica está funcionando assim:
 <img src="assets/alu.png" alt="Unidade Lógica e Aritmétrica de 8 bits" width="1000">
 
 ## Link do Video
+
+[![Video Demonstrativo](https://youtu.be/YbyjyPccMNM?si=oQjuRDaHrmAMAuWG)](https://youtu.be/YbyjyPccMNM?si=oQjuRDaHrmAMAuWG)
